@@ -23,6 +23,7 @@ const Home = () => {
         const response = await axios.get(
           "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections",
         );
+        console.log(data)
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -39,7 +40,7 @@ const Home = () => {
         <div id="top"></div>
         <Landing />
         <LandingIntro />
-        <HotCollections data={data} />
+        <HotCollections data={data} loading={loading} />
         <NewItems />
         <TopSellers />
         <BrowseByCategory />

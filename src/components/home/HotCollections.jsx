@@ -8,14 +8,26 @@ const HotCollections = ({ data, loading }) => {
       perView: 4,
       spacing: 15,
     },
-
+    breakpoints: {
+      "(max-width: 992px)": {
+        slides: {
+          perView: 2, 
+        },
+      },
+      "(max-width: 576px)": {
+        slides: {
+          perView: 1,
+        },
+      },
+    },
     slideChanged() {
       console.log("slide changed");
     },
   });
   console.log(data);
   if (loading) {
-    return  <section id="section-collections" className="no-bottom">
+    return (
+      <section id="section-collections" className="no-bottom">
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
@@ -24,7 +36,7 @@ const HotCollections = ({ data, loading }) => {
                 <div className="small-border bg-color-2"></div>
               </div>
               {/* Skeleton loading state */}
-              <div className="skeleton-container">
+              <div className="skeleton--container">
                 <div className="skeleton-box"></div>
                 <div className="skeleton-box"></div>
                 <div className="skeleton-box"></div>
@@ -33,7 +45,8 @@ const HotCollections = ({ data, loading }) => {
             </div>
           </div>
         </div>
-      </section> 
+      </section>
+    );
   }
 
   return (

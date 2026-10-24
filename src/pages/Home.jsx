@@ -22,6 +22,7 @@ const Home = () => {
       try {
         const response = await axios.get(
           "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections",
+          "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
         );
         setData(response.data);
         setLoading(false);
@@ -40,7 +41,7 @@ const Home = () => {
         <Landing />
         <LandingIntro />
         <HotCollections data={data} loading={loading} />
-        <NewItems />
+        <NewItems data={data} loading={loading} />
         <TopSellers />
         <BrowseByCategory />
       </div>

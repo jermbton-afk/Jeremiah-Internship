@@ -15515,6 +15515,9 @@ img {
 }
 
 @media only screen and (max-width: 992px) {
+
+
+  
   .de-submenu {
     position: fixed;
   }

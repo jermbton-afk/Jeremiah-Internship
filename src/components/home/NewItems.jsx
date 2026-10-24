@@ -1,9 +1,53 @@
+import { useKeenSlider } from "keen-slider/react";
 import React from "react";
 import { Link } from "react-router-dom";
-import AuthorImage from "../../images/author_thumbnail.jpg";
-import nftImage from "../../images/nftImage.jpg";
 
-const NewItems = () => {
+const NewItems = ({ data, loading }) => {
+  const [sliderRef, instanceRef] = useKeenSlider({
+    slides: {
+      perView: 4,
+      spacing: 15,
+    },
+    breakpoints: {
+      "(max-width: 992px)": {
+        slides: {
+          perView: 2,
+        },
+      },
+      "(max-width: 576px)": {
+        slides: {
+          perView: 1,
+        },
+      },
+    },
+    slideChanged() {
+      console.log("slide changed");
+    },
+  });
+  console.log(data);
+  if (loading) {
+    return (
+      <section id="section-collections" className="no-bottom">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="text-center">
+                <h2>Hot Collections</h2>
+                <div className="small-border bg-color-2"></div>
+              </div>
+              {/* Skeleton loading state */}
+              <div className="skeleton--container">
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   return (
     <section id="section-items" className="no-bottom">
       <div className="container">
@@ -14,7 +58,7 @@ const NewItems = () => {
               <div className="small-border bg-color-2"></div>
             </div>
           </div>
-          {new Array(4).fill(0).map((_, index) => (
+          {data.map((nft, index) => (
             <div className="col-lg-3 col-md-6 col-sm-6 col-xs-12" key={index}>
               <div className="nft__item">
                 <div className="author_list_pp">
@@ -22,9 +66,9 @@ const NewItems = () => {
                     to="/author"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
-                    title="Creator: Monica Lucas"
+                    title={`Creator: ${nft.creator}`}
                   >
-                    <img className="lazy" src={AuthorImage} alt="" />
+                    <img className="lazy" src={nft.AuthorImage} alt="" />
                     <i className="fa fa-check"></i>
                   </Link>
                 </div>
@@ -51,7 +95,7 @@ const NewItems = () => {
 
                   <Link to="/item-details">
                     <img
-                      src={nftImage}
+                      src={nft.nftImage}
                       className="lazy nft__item_preview"
                       alt=""
                     />
@@ -59,12 +103,12 @@ const NewItems = () => {
                 </div>
                 <div className="nft__item_info">
                   <Link to="/item-details">
-                    <h4>Pinky Ocean</h4>
+                    <h4>{nft.title}</h4>
                   </Link>
-                  <div className="nft__item_price">3.08 ETH</div>
+                  <div className="nft__item_price">{nft.price} ETH</div>
                   <div className="nft__item_like">
                     <i className="fa fa-heart"></i>
-                    <span>69</span>
+                    <span>{nft.likes}</span>
                   </div>
                 </div>
               </div>

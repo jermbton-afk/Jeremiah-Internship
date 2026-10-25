@@ -72,7 +72,7 @@ const NewItems = ({ data, loading }) => {
                     <i className="fa fa-check"></i>
                   </Link>
                 </div>
-                <div className="de_countdown">5h 30m 32s</div>
+                <div className="de_countdown">{nft.countdown}</div>
 
                 <div className="nft__item_wrap">
                   <div className="nft__item_extra">

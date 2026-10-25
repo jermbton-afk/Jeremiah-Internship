@@ -5,7 +5,6 @@ import Landing from "../components/home/Landing";
 import LandingIntro from "../components/home/LandingIntro";
 import NewItems from "../components/home/NewItems";
 import TopSellers from "../components/home/TopSellers";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const Home = () => {
@@ -13,26 +12,42 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { id } = useParams();
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
+const [hotCollectionData, setHotCollectionData] = useState([])
+const [hotCollectionLoading, setHotCollectionLoading] = useState(true)
+const [newItemsData, setNewItemsData] = useState([])
+const [newItemsLoading, setNewItemsLoading] = useState(true)
+
+async function fetchHotCollections() {
       try {
         const response = await axios.get(
           "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections",
-          "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
         );
-        setData(response.data);
-        setLoading(false);
+        setHotCollectionData(response.data);
+        setHotCollectionLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
+        setHotCollectionLoading(false);
       }
     }
-    fetchData();
-  }, [id]);
+
+async function fetchNewItems() {
+      try {
+        const response = await axios.get(
+          "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems",
+        );
+        setNewItemsData(response.data);
+        setNewItemsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setNewItemsLoading(false);
+      }
+    }
+
+  useEffect(() => {
+    fetchHotCollections();
+    fetchNewItems();
+  }, []);
 
   return (
     <div id="wrapper">
@@ -40,8 +55,8 @@ const Home = () => {
         <div id="top"></div>
         <Landing />
         <LandingIntro />
-        <HotCollections data={data} loading={loading} />
-        <NewItems data={data} loading={loading} />
+        <HotCollections data={hotCollectionData} loading={hotCollectionLoading} />
+        <NewItems data={newItemsData} loading={newItemsLoading} />
         <TopSellers />
         <BrowseByCategory />
       </div>

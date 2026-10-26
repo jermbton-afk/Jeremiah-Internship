@@ -1,9 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import AuthorImage from "../../images/author_thumbnail.jpg";
-import nftImage from "../../images/nftImage.jpg";
 
-const ExploreItems = () => {
+const ExploreItems = ({ data, loading }) => {
+  const [timeLeft, setTimeLeft] = useState([]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updatedTimeLeft = data.map((nft) => {
+        const totalSeconds = Math.max(
+          (new Date(nft.expiryDate) - Date.now()) / 1000,
+          0,
+        );
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+        return { ...nft, timeLeft: { hours, minutes, seconds } };
+      });
+      setTimeLeft(updatedTimeLeft);
+    }, 1000);
+
+    return () => clearInterval(interval); // Clean up the interval on unmount
+  }, [data, loading]);
+  if (loading) {
+    return (
+      <section id="section-collections" className="no-bottom">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="text-center">
+                <h2>Explore</h2>
+                <div className="small-border bg-color-2"></div>
+              </div>
+              {/* Skeleton loading state */}
+              <div className="skeleton--container">
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   return (
     <>
       <div>
@@ -14,7 +53,7 @@ const ExploreItems = () => {
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
-      {new Array(8).fill(0).map((_, index) => (
+      {timeLeft.map((nft, index) => (
         <div
           key={index}
           className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
@@ -27,11 +66,12 @@ const ExploreItems = () => {
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
               >
-                <img className="lazy" src={AuthorImage} alt="" />
+                <img className="lazy" src={nft.authorImage} alt="" />
                 <i className="fa fa-check"></i>
               </Link>
             </div>
-            <div className="de_countdown">5h 30m 32s</div>
+            <div className="de_countdown">{nft.timeLeft.hours}h {nft.timeLeft.minutes}m{" "}
+                      {nft.timeLeft.seconds}s</div>
 
             <div className="nft__item_wrap">
               <div className="nft__item_extra">
@@ -52,14 +92,18 @@ const ExploreItems = () => {
                 </div>
               </div>
               <Link to="/item-details">
-                <img src={nftImage} className="lazy nft__item_preview" alt="" />
+                <img
+                  src={nft.nftImage}
+                  className="lazy nft__item_preview"
+                  alt=""
+                />
               </Link>
             </div>
             <div className="nft__item_info">
               <Link to="/item-details">
-                <h4>Pinky Ocean</h4>
+                <h4>{nft.title}</h4>
               </Link>
-              <div className="nft__item_price">1.74 ETH</div>
+              <div className="nft__item_price">{nft.price} ETH</div>
               <div className="nft__item_like">
                 <i className="fa fa-heart"></i>
                 <span>69</span>

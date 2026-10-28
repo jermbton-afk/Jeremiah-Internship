@@ -43,7 +43,7 @@ const NewItems = ({ data, loading }) => {
 
     return () => clearInterval(interval); // Clean up the interval on unmount
   }, [data, loading]);
-  console.log(timeLeft);
+
   if (loading) {
     return (
       <section id="section-collections" className="no-bottom">
@@ -117,7 +117,7 @@ const NewItems = ({ data, loading }) => {
                         </div>
                       </div>
 
-                      <Link to="/item-details">
+                      <Link to={`/item-details/${nft.nftId}`}>
                         <img
                           src={nft.nftImage}
                           className="lazy nft__item_preview"
@@ -126,7 +126,7 @@ const NewItems = ({ data, loading }) => {
                       </Link>
                     </div>
                     <div className="nft__item_info">
-                      <Link to="/item-details">
+                      <Link to={`/item-details/${nft.nftId}`}>
                         <h4>{nft.title}</h4>
                       </Link>
                       <div className="nft__item_price">{nft.price} ETH</div>

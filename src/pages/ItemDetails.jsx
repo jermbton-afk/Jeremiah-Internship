@@ -2,10 +2,33 @@ import React, { useEffect } from "react";
 import EthImage from "../images/ethereum.svg";
 import { Link } from "react-router-dom";
 import AuthorImage from "../images/author_thumbnail.jpg";
+import { useParams } from "react-router-dom";
 
-const ItemDetails = ({ data, loading }) => {
+const ItemDetails = () => {
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const { id } = useParams();
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`https://us-central1-nft-cloud-functions.cloudfunctions.net/itemDetails?nftId=${id}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const itemData = await response.json();
+      setData(itemData);
+    } catch (error) {
+      console.error("Error fetching item data:", error);
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
   }, []);
 
   if (loading) {
@@ -15,14 +38,11 @@ const ItemDetails = ({ data, loading }) => {
           <div className="row">
             <div className="col-lg-12">
               <div className="text-center">
-                <h2>Explore</h2>
+                <h2>Item Details</h2>
                 <div className="small-border bg-color-2"></div>
               </div>
 
               <div className="skeleton--container">
-                <div className="skeleton-box"></div>
-                <div className="skeleton-box"></div>
-                <div className="skeleton-box"></div>
                 <div className="skeleton-box"></div>
               </div>
             </div>
@@ -35,7 +55,7 @@ const ItemDetails = ({ data, loading }) => {
   if (!data || typeof data !== "object") {
     return <div className="container">Item not found.</div>;
   }
-
+console.log(data);
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
@@ -54,7 +74,7 @@ const ItemDetails = ({ data, loading }) => {
 
               <div className="col-md-6">
                 <div className="item_info">
-                  <h2>{data.name || "Untitled NFT"}</h2>
+                  <h2>{data.title || "Untitled NFT"}</h2>
 
                   <div className="item_info_counts">
                     <div className="item_info_views">
@@ -88,7 +108,7 @@ const ItemDetails = ({ data, loading }) => {
 
                         <div className="author_list_info">
                           <Link to="/author">
-                            {data.owner || "Monica Lucas"}
+                            {data.ownerName || "Monica Lucas"}
                           </Link>
                         </div>
                       </div>
@@ -113,7 +133,7 @@ const ItemDetails = ({ data, loading }) => {
 
                         <div className="author_list_info">
                           <Link to="/author">
-                            {data.creator || "Monica Lucas"}
+                            {data.creatorId || "Monica Lucas"}
                           </Link>
                         </div>
                       </div>

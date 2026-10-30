@@ -77,10 +77,10 @@ const Author = () => {
                       <i className="fa fa-check"></i>
                       <div className="profile_name">
                         <h4>
-                          Monica Lucas
-                          <span className="profile_username">@monicaaaa</span>
+                          {data.authorName}
+                          <span className="profile_username">@{data.tag}</span>
                           <span id="wallet" className="profile_wallet">
-                            UDHUHWudhwd78wdt7edb32uidbwyuidhg7wUHIFUHWewiqdj87dy7
+                            {data.address}
                           </span>
                           <button id="btn_copy" title="Copy Text">
                             Copy
@@ -91,7 +91,7 @@ const Author = () => {
                   </div>
                   <div className="profile_follow de-flex">
                     <div className="de-flex-col">
-                      <div className="profile_follower">573 followers</div>
+                      <div className="profile_follower">{data.followers} followers</div>
                       <Link to="#" className="btn-main">
                         Follow
                       </Link>
@@ -102,7 +102,7 @@ const Author = () => {
 
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems />
+                  <AuthorItems data={setData} loading={setLoading} />
                 </div>
               </div>
             </div>

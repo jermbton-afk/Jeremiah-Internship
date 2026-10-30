@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 const ExploreItems = ({ data, loading }) => {
   const [timeLeft, setTimeLeft] = useState([]);
+  const [itemsToShow, setItemsToShow] = useState(8);
+  const [selectedFilter, setSelectedFilter] = useState(""); 
+
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedTimeLeft = data.map((nft) => {
@@ -19,7 +22,29 @@ const ExploreItems = ({ data, loading }) => {
     }, 1000);
 
     return () => clearInterval(interval); // Clean up the interval on unmount
-  }, [data, loading]);
+  }, [data, loading])
+  
+  const handleFilterChange = (event) => {
+    setSelectedFilter(event.target.value);
+  };
+
+    const sortedData = [...timeLeft].sort((a, b) => {
+    switch (selectedFilter) {
+      case "price_low_to_high":
+        return a.price - b.price;
+      case "price_high_to_low":
+        return b.price - a.price;
+      case "likes_high_to_low":
+        return b.likes - a.likes; 
+      default:
+        return 0; 
+    }
+  });
+
+   const handleLoadMore = () => {
+    setItemsToShow((prev) => prev + 4); 
+  };
+
   if (loading) {
     return (
       <section id="section-collections" className="no-bottom">
@@ -46,14 +71,14 @@ const ExploreItems = ({ data, loading }) => {
   return (
     <>
       <div>
-        <select id="filter-items" defaultValue="">
+        <select id="filter-items" value={selectedFilter} onChange={handleFilterChange}>
           <option value="">Default</option>
           <option value="price_low_to_high">Price, Low to High</option>
           <option value="price_high_to_low">Price, High to Low</option>
           <option value="likes_high_to_low">Most liked</option>
         </select>
       </div>
-      {timeLeft.map((nft, index) => (
+      {sortedData.slice(0, itemsToShow).map((nft, index) => (
         <div
           key={index}
           className="d-item col-lg-3 col-md-6 col-sm-6 col-xs-12"
@@ -112,11 +137,13 @@ const ExploreItems = ({ data, loading }) => {
           </div>
         </div>
       ))}
+      {itemsToShow < sortedData.length && (
       <div className="col-md-12 text-center">
-        <Link to="" id="loadmore" className="btn-main lead">
-          Load more
-        </Link>
+        <button onClick={handleLoadMore} className="btn-main lead">
+            Load more
+          </button>
       </div>
+      )}
     </>
   );
 };

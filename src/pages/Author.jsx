@@ -40,6 +40,9 @@ const Author = () => {
 
               <div className="skeleton--container">
                 <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
+                <div className="skeleton-box"></div>
               </div>
             </div>
           </div>
@@ -102,7 +105,7 @@ const Author = () => {
 
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems data={setData} loading={setLoading} />
+                  <AuthorItems data={data.nftCollection || []} loading={loading} authorImage={data.authorImage} />
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const AuthorItems = ({ data, loading }) => {
+const AuthorItems = ({ data, loading, authorImage }) => {
 
    if (loading) {
     return (
@@ -36,7 +36,7 @@ const AuthorItems = ({ data, loading }) => {
               <div className="nft__item">
                 <div className="author_list_pp">
                   <Link to="">
-                    <img className="lazy" src={item.nftImage} alt="" />
+                    <img className="lazy" src={authorImage} alt="" />
                     <i className="fa fa-check"></i>
                   </Link>
                 </div>

@@ -12,7 +12,7 @@ const ItemDetails = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const fetchData = async () => {
+  const fetchItemData = async () => {
     try {
       const response = await fetch(`https://us-central1-nft-cloud-functions.cloudfunctions.net/itemDetails?nftId=${id}`);
       if (!response.ok) {
@@ -28,7 +28,7 @@ const ItemDetails = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+    fetchItemData();
   }, []);
 
   if (loading) {

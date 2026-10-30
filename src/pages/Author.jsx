@@ -1,10 +1,57 @@
-import React from "react";
-import AuthorBanner from "../images/author_banner.jpg";
+
 import AuthorItems from "../components/author/AuthorItems";
-import { Link } from "react-router-dom";
-import AuthorImage from "../images/author_thumbnail.jpg";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Author = () => {
+
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { authorId } = useParams();
+
+  async function fetchAuthor() {
+    try {
+      const response = await axios.get(
+        `https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${authorId}`,
+      );
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
+  }
+
+   useEffect(() => {
+      fetchAuthor();
+    }, []);
+
+     if (loading) {
+    return (
+      <section id="section-collections" className="no-bottom">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="text-center">
+                <h2>Item Details</h2>
+                <div className="small-border bg-color-2"></div>
+              </div>
+
+              <div className="skeleton--container">
+                <div className="skeleton-box"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!data || typeof data !== "object") {
+    return <div className="container">Item not found.</div>;
+  }
+
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
@@ -15,7 +62,7 @@ const Author = () => {
           aria-label="section"
           className="text-light"
           data-bgimage="url(images/author_banner.jpg) top"
-          style={{ background: `url(${AuthorBanner}) top` }}
+          style={{ background: `url(${data.authorImage}) top` }}
         ></section>
 
         <section aria-label="section">
@@ -25,7 +72,7 @@ const Author = () => {
                 <div className="d_profile de-flex">
                   <div className="de-flex-col">
                     <div className="profile_avatar">
-                      <img src={AuthorImage} alt="" />
+                      <img src={data.authorImage} alt="" />
 
                       <i className="fa fa-check"></i>
                       <div className="profile_name">

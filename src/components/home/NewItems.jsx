@@ -1,6 +1,8 @@
 import { useKeenSlider } from "keen-slider/react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const NewItems = ({ data, loading }) => {
   const [timeLeft, setTimeLeft] = useState([]);
@@ -24,6 +26,16 @@ const NewItems = ({ data, loading }) => {
     slideChanged() {
       console.log("slide changed");
     },
+  });
+
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      AOS.refreshHard();
+    }
   });
 
   useEffect(() => {
@@ -68,7 +80,7 @@ const NewItems = ({ data, loading }) => {
     );
   }
   return (
-    <section id="section-items" className="no-bottom">
+    <section id="section-items" className="no-bottom" data-aos="fade-up">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">

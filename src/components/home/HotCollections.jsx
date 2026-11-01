@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
 
 const HotCollections = ({ data, loading }) => {
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -11,7 +14,7 @@ const HotCollections = ({ data, loading }) => {
     breakpoints: {
       "(max-width: 992px)": {
         slides: {
-          perView: 2, 
+          perView: 2,
         },
       },
       "(max-width: 576px)": {
@@ -24,6 +27,16 @@ const HotCollections = ({ data, loading }) => {
       console.log("slide changed");
     },
   });
+
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      AOS.refreshHard();
+    }
+  }, [loading]);
 
   if (loading) {
     return (
@@ -50,7 +63,7 @@ const HotCollections = ({ data, loading }) => {
   }
 
   return (
-    <section id="section-collections" className="no-bottom">
+    <section id="section-collections" className="no-bottom" data-aos="fade-up">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">

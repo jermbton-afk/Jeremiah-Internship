@@ -7,6 +7,7 @@ import NewItems from "../components/home/NewItems";
 import TopSellers from "../components/home/TopSellers";
 import axios from "axios";
 
+
 const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);

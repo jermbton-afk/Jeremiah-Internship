@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 
 
 const TopSellers = ({ data, loading }) => {
-   if (loading) {
+
+
+    useEffect(() => {
+      AOS.init({ duration: 800, once: true });
+    }, []);
+
+    useEffect(() => {
+      if (!loading) {
+        AOS.refreshHard();
+      }
+});
+
+ if (loading) {
     return (
       <section id="section-collections" className="no-bottom">
         <div className="container">
@@ -26,8 +41,10 @@ const TopSellers = ({ data, loading }) => {
       </section>
     );
   }
+  
+
   return (
-    <section id="section-popular" className="pb-5">
+    <section id="section-popular" className="pb-5" data-aos="fade-up">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">

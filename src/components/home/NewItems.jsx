@@ -36,10 +36,10 @@ const NewItems = ({ data, loading }) => {
     if (!loading) {
       AOS.refreshHard();
     }
-  });
+  }, [loading]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const updateTimeLeft = () => {
       const updatedTimeLeft = data.map((nft) => {
         const totalSeconds = Math.max(
           (new Date(nft.expiryDate) - Date.now()) / 1000,
@@ -51,10 +51,19 @@ const NewItems = ({ data, loading }) => {
         return { ...nft, timeLeft: { hours, minutes, seconds } };
       });
       setTimeLeft(updatedTimeLeft);
+    };
+
+    updateTimeLeft();
+    const interval = setInterval(() => {
+      updateTimeLeft();
     }, 1000);
 
     return () => clearInterval(interval); // Clean up the interval on unmount
   }, [data, loading]);
+
+  useEffect(() => {
+    instanceRef.current?.update();
+  }, [instanceRef, timeLeft.length]);
 
   if (loading) {
     return (
